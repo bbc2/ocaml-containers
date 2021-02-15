@@ -8,6 +8,7 @@ jobs:
   run:
     name: Build
     strategy:
+      fail-fast: false
       matrix:
         os:
           - macos-latest
@@ -46,10 +47,10 @@ jobs:
       - run: opam install -t containers containers-data containers-thread --deps-only
         if: ${{ matrix.os == 'ubuntu-latest' && steps.cache-opam.outputs.cache-hit != 'true' }}
 
-      - run: opam install containers-data containers-thread --deps-only  # no test deps
+      - run: opam install -t containers --deps-only  # no test deps
         if: ${{ matrix.os != 'ubuntu-latest' && steps.cache-opam.outputs.cache-hit != 'true' }}
 
-      - run: opam install -t containers containers-data containers-thread --deps-only  # no test deps
+      - run: opam install containers-data containers-thread --deps-only  # no test deps
         if: ${{ matrix.os != 'ubuntu-latest' && steps.cache-opam.outputs.cache-hit != 'true' }}
 
       - run: opam exec -- dune build
