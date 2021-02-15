@@ -43,10 +43,13 @@ jobs:
 
       - run: opam depext -yt containers containers-data containers-thread
 
-      - run: opam install -t . --deps-only
+      - run: opam install -t containers containers-data containers-thread --deps-only
         if: ${{ matrix.os == 'ubuntu-latest' && steps.cache-opam.outputs.cache-hit != 'true' }}
 
-      - run: opam install . --deps-only  # no test deps
+      - run: opam install containers-data containers-thread --deps-only  # no test deps
+        if: ${{ matrix.os != 'ubuntu-latest' && steps.cache-opam.outputs.cache-hit != 'true' }}
+
+      - run: opam install -t containers containers-data containers-thread --deps-only  # no test deps
         if: ${{ matrix.os != 'ubuntu-latest' && steps.cache-opam.outputs.cache-hit != 'true' }}
 
       - run: opam exec -- dune build
