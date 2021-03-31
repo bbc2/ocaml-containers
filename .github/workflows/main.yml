@@ -5,9 +5,8 @@ jobs:
     name: Build
     strategy:
       matrix:
-        #os: [macos-latest, ubuntu-latest, windows-latest]
-        os: [macos-latest, ubuntu-latest]
-        ocaml: [ '4.08.0', '4.03.0', '4.11.0' ]
+        os: [macos-latest]
+        ocaml: ['4.11.0']
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@main
@@ -19,7 +18,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: _opam
-        key: opam-${{matrix.operating-system}}-${{matrix.ocaml-version}}
+        key: opam-${{ matrix.os }}-${{ matrix.ocaml }}
     - run: opam pin -n .
       if: steps.cache-opam.outputs.cache-hit != 'true'
     - run: opam depext -yt containers containers-data containers-thread
